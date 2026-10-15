@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Waka Kurikulum</title>
+    <!-- Tailwind CSS for Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for Graphics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-slate-100 font-sans text-slate-800">
+
+    <!-- ========================================== -->
+    <!-- 1. HEADER & NAVBAR                         -->
+    <!-- ========================================== -->
+    <header class="bg-emerald-800 text-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white text-emerald-800 p-2 rounded-lg font-bold text-xl">
+                    <i class="fa-solid font-bold fa-school"></i>
+                </div>
+                <div>
+                    <!-- MA NAHDLATUL ARIFIN -->
+                    <h1 class="font-bold text-lg leading-tight" id="MA NAHDLATUL ARIFIN">MA NAHDLATUL ARIFIN</h1>
+                    <p class="text-xs text-emerald-200">Portal Resmi Waka Kurikulum</p>
+                </div>
+            </div>
+            <div class="text-right hidden sm:block">
+                <div id="clock" class="text-sm font-semibold">00:00:00 WIB</div>
+                <div id="date" class="text-xs text-emerald-200">Kamis, 15 Oktober 2026</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- 2. LAYOUT UTAMA (SIDEBAR + KONTEN)         -->
+    <!-- ========================================== -->
+    <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row gap-6">
+
+        <!-- SIDEBAR NAVIGASI -->
+        <aside class="w-full md:w-64 bg-white rounded-xl shadow-sm p-4 h-fit">
+            <div class="text-center pb-4 mb-4 border-b">
+                <div class="w-16 h-16 bg-emerald-100 text-emerald-800 rounded-full mx-auto flex items-center justify-center text-2xl font-bold mb-2">
+                    <i class="fa-solid fa-user-tie"></i>
+                </div>
+                <!-- HALIMATUS SAADAH, S.Pd -->
+                <h2 class="font-bold text-slate-800" id="HALIMATUS SAADAH, S.Pd">HALIMATUS SAADAH, S.Pd</h2>
+                <p class="text-xs text-slate-500">Waka Kurikulum</p>
+            </div>
+
+            <nav class="space-y-1">
+                <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium bg-emerald-700 text-white">
+                    <i class="fa-solid fa-chart-line w-5"></i><span>Dashboard</span>
+                </button>
+                <button onclick="switchTab('jadwal')" id="btn-jadwal" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100">
+                    <i class="fa-solid fa-calendar-days w-5"></i><span>Jadwal Pelajaran</span>
+                </button>
+                <button onclick="switchTab('absen')" id="btn-absen" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100">
+                    <i class="fa-solid fa-user-check w-5"></i><span>Absensi Guru</span>
+                </button>
+                <button onclick="switchTab('modul')" id="btn-modul" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100">
+                    <i class="fa-solid fa-book-open w-5"></i><span>Modul Ajar / RPP</span>
+                </button>
+                <button onclick="switchTab('jurnal')" id="btn-jurnal" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100">
+                    <i class="fa-solid fa-newspaper w-5"></i><span>Jurnal Mengajar</span>
+                </button>
+                <button onclick="switchTab('sertifikat')" id="btn-sertifikat" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100">
+                    <i class="fa-solid fa-certificate w-5"></i><span>E-Sertifikat Guru</span>
+                </button>
+            </nav>
+        </aside>
+
+        <!-- AREA KONTEN DINAMIS -->
+        <main class="flex-1">
+
+            <!-- TAB 1: DASHBOARD -->
+            <section id="tab-dashboard" class="tab-content space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-emerald-600">
+                        <p class="text-xs text-slate-500 font-medium">Total Guru</p>
+                        <h3 class="text-2xl font-bold mt-1" id="stat-total-guru">0</h3>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-blue-600">
+                        <p class="text-xs text-slate-500 font-medium">Presensi Hari Ini</p>
+                        <h3 class="text-2xl font-bold mt-1" id="stat-presensi">0%</h3>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-amber-600">
+                        <p class="text-xs text-slate-500 font-medium">Modul Terverifikasi</p>
+                        <h3 class="text-2xl font-bold mt-1" id="stat-modul">0</h3>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-purple-600">
+                        <p class="text-xs text-slate-500 font-medium">Jurnal Terisi</p>
+                        <h3 class="text-2xl font-bold mt-1" id="stat-jurnal">0</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h3 class="font-bold text-slate-800 mb-4"><i class="fa-solid fa-chart-bar text-emerald-600 mr-2"></i>Rekap Kehadiran Guru Minggu Ini</h3>
+                    <div class="h-64">
+                        <canvas id="chartPresensi"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: JADWAL PELAJARAN -->
+            <section id="tab-jadwal" class="tab-content hidden space-y-4">
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-800"><i class="fa-solid fa-calendar-days text-emerald-600 mr-2"></i>Jadwal Pelajaran</h3>
+                        <button onclick="tambahData('jadwal')" class="bg-emerald-700 text-white text-sm px-3 py-1.5 rounded-lg hover:bg-emerald-800"><i class="fa-solid fa-plus mr-1"></i>Tambah Jadwal</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-slate-600">
+                            <thead class="text-xs text-slate-700 uppercase bg-slate-50">
+                                <tr>
+                                    <th class="px-4 py-3">Hari</th>
+                                    <th class="px-4 py-3">Jam / Waktu</th>
+                                    <th class="px-4 py-3">Kelas</th>
+                                    <th class="px-4 py-3">Mata Pelajaran</th>
+                                    <th class="px-4 py-3">Guru Pengampu</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-jadwal" class="divide-y">
+                                <!-- Data diisi via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: ABSENSI GURU -->
+            <section id="tab-absen" class="tab-content hidden space-y-4">
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-800"><i class="fa-solid fa-user-check text-emerald-600 mr-2"></i>Absensi Guru Hari Ini</h3>
+                        <button onclick="tambahData('absen')" class="bg-emerald-700 text-white text-sm px-3 py-1.5 rounded-lg hover:bg-emerald-800"><i class="fa-solid fa-plus mr-1"></i>Catat Presensi</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-slate-600">
+                            <thead class="text-xs text-slate-700 uppercase bg-slate-50">
+                                <tr>
+                                    <th class="px-4 py-3">Nama Guru</th>
+                                    <th class="px-4 py-3">Jam Masuk</th>
+                                    <th class="px-4 py-3">Status</th>
+                                    <th class="px-4 py-3">Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-absen" class="divide-y">
+                                <!-- Data diisi via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: MODUL AJAR -->
+            <section id="tab-modul" class="tab-content hidden space-y-4">
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-800"><i class="fa-solid fa-book-open text-emerald-600 mr-2"></i>Modul Ajar & RPP</h3>
+                        <button onclick="tambahData('modul')" class="bg-emerald-700 text-white text-sm px-3 py-1.5 rounded-lg hover:bg-emerald-800"><i class="fa-solid fa-upload mr-1"></i>Upload Modul</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-slate-600">
+                            <thead class="text-xs text-slate-700 uppercase bg-slate-50">
+                                <tr>
+                                    <th class="px-4 py-3">Judul Modul</th>
+                                    <th class="px-4 py-3">Guru</th>
+                                    <th class="px-4 py-3">Kelas / Fase</th>
+                                    <th class="px-4 py-3">Status Verifikasi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-modul" class="divide-y">
+                                <!-- Data diisi via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: JURNAL MENGAJAR -->
+            <section id="tab-jurnal" class="tab-content hidden space-y-4">
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-800"><i class="fa-solid fa-newspaper text-emerald-600 mr-2"></i>Jurnal Mengajar Guru</h3>
+                        <button onclick="tambahData('jurnal')" class="bg-emerald-700 text-white text-sm px-3 py-1.5 rounded-lg hover:bg-emerald-800"><i class="fa-solid fa-plus mr-1"></i>Isi Jurnal</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-slate-600">
+                            <thead class="text-xs text-slate-700 uppercase bg-slate-50">
+                                <tr>
+                                    <th class="px-4 py-3">Tanggal</th>
+                                    <th class="px-4 py-3">Nama Guru</th>
+                                    <th class="px-4 py-3">Kelas & Mapel</th>
+                                    <th class="px-4 py-3">Materi / Catatan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-jurnal" class="divide-y">
+                                <!-- Data diisi via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 6: E-SERTIFIKAT -->
+            <section id="tab-sertifikat" class="tab-content hidden space-y-4">
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-800"><i class="fa-solid fa-certificate text-emerald-600 mr-2"></i>E-Sertifikat Guru</h3>
+                        <button onclick="tambahData('sertifikat')" class="bg-emerald-700 text-white text-sm px-3 py-1.5 rounded-lg hover:bg-emerald-800"><i class="fa-solid fa-plus mr-1"></i>Tambah Sertifikat</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="grid-sertifikat">
+                        <!-- Data Card diisi via JS -->
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 3. JAVASCRIPT & KONFIGURASI DATA MURNI    -->
+    <!-- ========================================== -->
+    <script>
+        // ==========================================
+        // SILAKAN EDIT DATA UTAMA DI BAWAH INI
+        // ==========================================
+        const CONFIG = {
+            namaSekolah: "MA NAHDLATUL ARIFIN", // Ganti Nama Sekolah
+            namaWaka: "HALIMATUS SAADAH, S.Pd."    // Ganti Nama Waka
+        };
+
+        // DATA DEFAULT (Bisa Anda sesuaikan secara bebas)
+        let dataGuru = [
+            { id: 1, nama: "Guru A, S.Pd.", mapel: "Matematika" },
+            { id: 2, nama: "Guru B, M.Pd.", mapel: "Bahasa Indonesia" },
+            { id: 3, nama: "Guru C, S.Si.", mapel: "Fisika" }
+        ];
+
+        let dataJadwal = [
+            { hari: "Senin", jam: "07.00 - 08.30", kelas: "X-A", mapel: "Matematika", guru: "Guru A, S.Pd." },
+            { hari: "Senin", jam: "08.30 - 10.00", kelas: "XI-IPA", mapel: "Fisika", guru: "Guru C, S.Si." }
+        ];
+
+        let dataAbsen = [
+            { nama: "Guru A, S.Pd.", jam: "06.45", status: "Hadir", ket: "Tepat Waktu" },
+            { nama: "Guru B, M.Pd.", jam: "07.00", status: "Hadir", ket: "Tepat Waktu" }
+        ];
+
+        let dataModul = [
+            { judul: "Modul Ajar Bab 1 - Aljabar", guru: "Guru A, S.Pd.", kelas: "Kelas X", status: "Terverifikasi" },
+            { judul: "Modul Ajar Teks Laporan", guru: "Guru B, M.Pd.", kelas: "Kelas XI", status: "Perlu Revisi" }
+        ];
+
+        let dataJurnal = [
+            { tgl: "2026-10-15", guru: "Guru A, S.Pd.", detail: "X-A (Matematika)", materi: "Persamaan Kuadrat" }
+        ];
+
+        let dataSertifikat = [
+            { guru: "Guru A, S.Pd.", kegiatan: "Workshop Kurikulum Merdeka", tgl: "10 Oktober 2026" }
+        ];
+
+        // ==========================================
+        // LOGIK APLIKASI (SPA NAVIGASI & RENDER)
+        // ==========================================
+        document.addEventListener("DOMContentLoaded", () => {
+            // Apply Config
+            document.getElementById("nama-sekolah").innerText = CONFIG.namaSekolah;
+            document.getElementById("nama-waka").innerText = CONFIG.namaWaka;
+
+            // Start Realtime Clock
+            setInterval(updateClock, 1000);
+            updateClock();
+
+            // Render All Tables
+            renderDashboard();
+            renderJadwal();
+            renderAbsen();
+            renderModul();
+            renderJurnal();
+            renderSertifikat();
+            initChart();
+        });
+
+        // Switch Navigation Tab
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-emerald-700', 'text-white');
+                btn.classList.add('text-slate-600');
+            });
+
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`btn-${tabName}`);
+            activeBtn.classList.add('bg-emerald-700', 'text-white');
+            activeBtn.classList.remove('text-slate-600');
+        }
+
+        // Realtime Clock Function
+        function updateClock() {
+            const now = new Date();
+            document.getElementById("clock").innerText = now.toLocaleTimeString('id-ID') + " WIB";
+        }
+
+        // RENDER FUNCTIONS
+        function renderDashboard() {
+            document.getElementById("stat-total-guru").innerText = dataGuru.length;
+            document.getElementById("stat-presensi").innerText = Math.round((dataAbsen.length / dataGuru.length) * 100) + "%";
+            document.getElementById("stat-modul").innerText = dataModul.filter(m => m.status === 'Terverifikasi').length;
+            document.getElementById("stat-jurnal").innerText = dataJurnal.length;
+        }
+
+        function renderJadwal() {
+            const tbody = document.getElementById("table-jadwal");
+            tbody.innerHTML = dataJadwal.map(item => `
+                <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-3 font-semibold">${item.hari}</td>
+                    <td class="px-4 py-3">${item.jam}</td>
+                    <td class="px-4 py-3"><span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">${item.kelas}</span></td>
+                    <td class="px-4 py-3">${item.mapel}</td>
+                    <td class="px-4 py-3">${item.guru}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderAbsen() {
+            const tbody = document.getElementById("table-absen");
+            tbody.innerHTML = dataAbsen.map(item => `
+                <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-3 font-medium">${item.nama}</td>
+                    <td class="px-4 py-3">${item.jam}</td>
+                    <td class="px-4 py-3"><span class="bg-emerald-100 text-emerald-800 text-xs px-2 py-1 rounded-full">${item.status}</span></td>
+                    <td class="px-4 py-3 text-slate-500">${item.ket}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderModul() {
+            const tbody = document.getElementById("table-modul");
+            tbody.innerHTML = dataModul.map(item => `
+                <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-3 font-medium text-emerald-700">${item.judul}</td>
+                    <td class="px-4 py-3">${item.guru}</td>
+                    <td class="px-4 py-3">${item.kelas}</td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 text-xs rounded ${item.status === 'Terverifikasi' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                            ${item.status}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderJurnal() {
+            const tbody = document.getElementById("table-jurnal");
+            tbody.innerHTML = dataJurnal.map(item => `
+                <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-3">${item.tgl}</td>
+                    <td class="px-4 py-3 font-medium">${item.guru}</td>
+                    <td class="px-4 py-3">${item.detail}</td>
+                    <td class="px-4 py-3">${item.materi}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderSertifikat() {
+            const grid = document.getElementById("grid-sertifikat");
+            grid.innerHTML = dataSertifikat.map(item => `
+                <div class="border rounded-lg p-4 bg-slate-50 flex justify-between items-center">
+                    <div>
+                        <h4 class="font-bold text-slate-800">${item.kegiatan}</h4>
+                        <p class="text-xs text-slate-500">Penerima: ${item.guru}</p>
+                        <p class="text-xs text-emerald-600 mt-1"><i class="fa-solid fa-calendar mr-1"></i>${item.tgl}</p>
+                    </div>
+                    <button onclick="alert('Mencetak E-Sertifikat...')" class="text-xs bg-emerald-700 text-white px-3 py-1.5 rounded hover:bg-emerald-800"><i class="fa-solid fa-download mr-1"></i>Cetak</button>
+                </div>
+            `).join('');
+        }
+
+        // Simple Chart Setup
+        function initChart() {
+            const ctx = document.getElementById('chartPresensi').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'sabtu', 'minggu'],
+                    datasets: [{
+                        label: '% Kehadiran Guru',
+                        data: [95, 100, 98, 92, 96, 90],
+                        backgroundColor: '#047857'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        // Generic Add Data Prompt Simples
+        function tambahData(tipe) {
+            const input = prompt(`Masukkan data baru untuk ${tipe.toUpperCase()}:`);
+            if (input) {
+                alert(`Data ${tipe} berhasil ditambahkan! (Simulasi)`);
+            }
+        }
+    </script>
+</body>
+</html>
